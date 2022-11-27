@@ -1,0 +1,633 @@
+[
+  
+  {
+    "title": "섹션6. 스프링DB 접근 기술",
+    "url": "/posts/%EC%8A%A4%ED%94%84%EB%A7%81DB%EC%A0%91%EA%B7%BC%EA%B8%B0%EC%88%A0/",
+    "categories": "강의, 스프링입문",
+    "tags": "스프링입문",
+    "date": "2022-11-26 23:00:06 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "H2 데이터베이스  용량이 낮고 가벼움 &amp; 웹으로 DB를 보여줌 → 교육용으로 좋은 DB  버전은 1.4.200  실행 명령 : ./h2.sh  실행하고 DB파일 생성시 파일이름.mv.db 파일이 생김데이터베이스 접속 설정  build.gradle에 jdbc, h2 관련 라이브러리를 추가implementation 'org.springframew...",
+    "content": "H2 데이터베이스  용량이 낮고 가벼움 &amp; 웹으로 DB를 보여줌 → 교육용으로 좋은 DB  버전은 1.4.200  실행 명령 : ./h2.sh  실행하고 DB파일 생성시 파일이름.mv.db 파일이 생김데이터베이스 접속 설정  build.gradle에 jdbc, h2 관련 라이브러리를 추가implementation 'org.springframework.boot:spring-boot-starter-jdbc'runtimeOnly 'com.h2database:h2'      application.properties에 DB 접속정보 작성      spring.datasource.url=jdbc:h2:tcp://localhost/~/test  spring.datasource.driver-class-name=org.h2.Driver  spring.datasource.username=sa              접속정보 작성 시 스프링 부트가 자동으로 DataSource를 생성      JdbcMemberRepository  MemoryMemberRepository처럼 MemberRepository를 상속받아 구현한 구현체 클래스  Jdbc를 이용해 데이터베이스에 저장하는 MemberRepository이다.  접속정보 작성 시 생성된 DataSource를 주입받아 사용  기본 구조          sql문 작성      Connection, PreparedStatement, ResultSet 변수 초기화      위 변수 사용 시 Exception이 많이 발생하므로 try/catch로 감싸놓는다      try 안에서 Connection 연결, PreparedStatement로 sql 전송, ResultSet에 결과값 저장      Connection 릴리즈 → 안할 시 Connection이 쌓여 대참사;;      JdbcTemplateMemberRepository  MemberRepository를 상속받아 구현한 구현체 클래스  DataSource를 이용해 JdbcTemplate를 생성해 사용한다  간단하게 정리하면 위의 Jdbc 코드를 많이 줄인것JPA 설정  build.gradle에 JPA 라이브러리 추가implementation 'org.springframework.boot:spring-boot-starter-data-jpa'      application.properties에 JPA 설정 작성      spring.jpa.show-sql=true  spring.jpa.hibernate.ddl-auto=none              작성 시 스프링 부트가 자동으로 EntityManager 자동 생성      JPA  Java ORM  JPA를 사용하면, SQL과 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있고 개발 생산성을 크게 높일 수 있다.  JPA는 기존의 반복 코드는 물론이고, 기본적인 SQL도 JPA가 직접 만들어서 실행해준다.  JPA를 사용 시 @Entity 어노테이션 사용 → @Id 선언 필수  EntityManager 사용 → 영속성 컨텍스트를 관리해주는 매니저스프링 데이터 JPA  JPA를 기반으로하는 프레임워크  반복적으로 개발해오던 CRUD를 제공 → 반복작업이 줄어들고 그 시간을 핵심 비즈니스 로직을 개발하는데 집중할 수 있음  인터페이스 구현만으로 80% 해결 가능 → 어메이징!!!  다만 동적쿼리는 해결 x → 동적쿼리는 Querydsl 라이브러리 사용SpringConfig  Spring Bean을 수동으로 등록할 때 사용했던 파일  기존에 설정해 두었던 MemberRepository의 생성자를 다른 구현체로 변경  이 파일만 변경하는 것으로 구현체 변경을 굉장히 쉽게 할 수 있음 → 스프링 DI의 장점스프링 통합 테스트  기존 테스트들은 스프링과 관련이 없는 자바 코드  따라서 스프링 컨테이너 내의 스프링 빈 사용 x  @SpringBootTest, @Transactional를 사용어노테이션  @SpringBootTest : 스프링 컨테이너와 테스트를 함께 실행한다.  @Transactional : 테스트 케이스에 이 어노테이션이 있으면, 테스트 시작 전에 트랜잭션을 시작하고, 테스트 완료 후에 항상 롤백한다. 이렇게 하면 DB에 데이터가 남지 않으므로 다음 테스트에 영향을 주지 않는다.  @Entity : JPA 사용 시 DB에 대응되는 값  @Id : JPA 사용 시 DB에서 PK로 사용할 값임을 선언해주는 것  @GeneratedValue : id 값을 어떻게 설정해줄지 정해주는 것, IDENTITY는 DB에서 자동생성  @Column : DB의 컬럼명을 설정해줄 수 있음.팁  생성자가 하나라면 @Autowired 생략 가능"
+  },
+  
+  {
+    "title": "섹션5. 회원 관리 예제 - 웹 MVC 개발",
+    "url": "/posts/%ED%9A%8C%EC%9B%90%EA%B4%80%EB%A6%AC%EC%98%88%EC%A0%9C%EC%9B%B9MVC%EA%B0%9C%EB%B0%9C/",
+    "categories": "강의, 스프링입문",
+    "tags": "스프링입문",
+    "date": "2022-11-26 23:00:05 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "내용  그냥 코드 따라치는거라 정리할게 없음",
+    "content": "내용  그냥 코드 따라치는거라 정리할게 없음"
+  },
+  
+  {
+    "title": "섹션4. 스프링 빈과 의존관계",
+    "url": "/posts/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B9%88%EA%B3%BC%EC%9D%98%EC%A1%B4%EA%B4%80%EA%B3%84/",
+    "categories": "강의, 스프링입문",
+    "tags": "스프링입문",
+    "date": "2022-11-26 23:00:04 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "Controller  Controller는 Service를 통해서 데이터를 조회해야함  이런 관계를 의존관계가 있다 라고함스프링 컨테이너 &amp; 스프링 빈  스프링 컨테이너          스프링 빈의 생명주기를 관리하며, 생성된 스프링 빈들에게 추가적인 기능을 제공하는 역할      일반적으로는 new 생성자, 인터페이스 호출, 팩토리 호출 방식...",
+    "content": "Controller  Controller는 Service를 통해서 데이터를 조회해야함  이런 관계를 의존관계가 있다 라고함스프링 컨테이너 &amp; 스프링 빈  스프링 컨테이너          스프링 빈의 생명주기를 관리하며, 생성된 스프링 빈들에게 추가적인 기능을 제공하는 역할      일반적으로는 new 생성자, 인터페이스 호출, 팩토리 호출 방식으로 객체를 생성하고 소멸      스프링 컨테이너는 위의 역할을 대신해준다 → 제어 흐름을 외부에서 관리하게 된다.      객체들 간의 의존 관계를 런타임 과정에서 자동으로 만들어준다.        스프링 빈          스프링 컨테이너에 의해 관리되는 자바 객체를 의미      스프링 빈을 등록하는 방법                  컴포넌트 스캔                          @Controller, @Repository, @Service 사용, 이들은 @Component를 내장              위 어노테이션이 있으면 객체를 하나씩 생성해 컨테이너에 저장                                직접 스프링 빈 등록                          hellospring 패키지 아래 SpringConfig라는 클래스 생성              @Configuration을 사용하여 SpringConfig 클래스를 빈 설정 클래스로 변경              @Bean을 붙혀 빈에 등록되도록 설정함              이후 메모리 방식이 아닌 DB방식으로 수정할 때 설정파일만 변경하면 변경완료              유지보수에 용이                                          어노테이션@Autowired  @Autowired로 설정한 메서드 자동호출 → 인스턴스 자동 주입  필요한 의존 객체의 타입에 해당하는 빈을 컨테이너에서 찾아 주입한다.  이를 DI(Dependency Injection), 의존성 주입 이라고 한다.  타입 종류          생성자 → 권장하는 방식      setter      필드      @Configuration  해당 클래스를 빈 설정을 담당하는 클래스로 변경참고https://steady-coding.tistory.com/594https://devlog-wjdrbs96.tistory.com/166"
+  },
+  
+  {
+    "title": "섹션3. 회원 관리 예제 - 백엔드 개발",
+    "url": "/posts/%ED%9A%8C%EC%9B%90%EA%B4%80%EB%A6%AC%EC%98%88%EC%A0%9C%EB%B0%B1%EC%97%94%EB%93%9C%EA%B0%9C%EB%B0%9C/",
+    "categories": "강의, 스프링입문",
+    "tags": "스프링입문",
+    "date": "2022-11-26 23:00:03 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "섹션2. 스프링 웹 개발 기초정적 컨탠츠(Static Content)  resources 아래 static 폴더에 html 파일을 생성하면 정적 html 페이지를 반환MVC와 템플릿  MVC = Model, View, Controller  View → 화면을 그려주기만 하는 것  역할을 분명히 나눠 유지보수를 원할하게 하기 위함API  MVC와 다르게...",
+    "content": "섹션2. 스프링 웹 개발 기초정적 컨탠츠(Static Content)  resources 아래 static 폴더에 html 파일을 생성하면 정적 html 페이지를 반환MVC와 템플릿  MVC = Model, View, Controller  View → 화면을 그려주기만 하는 것  역할을 분명히 나눠 유지보수를 원할하게 하기 위함API  MVC와 다르게 클라이언트가 요청한 값을 문자열 또는 객체로 반환하는 것어노테이션  @RequestParam(”파라미터”) → get방식에서 사용하는 것, 주소에서 ?뒤에 오는 “파라미터”의 값을 사용할 수 있게 해준다.  @ResponseBody → 서버에서 클라이언트로 데이터를 보낼때 해당 어노테이션을 사용한다면 HttpMessageConverter가 동작을 한다. → HttpMessageConverter는 응답본문이 단순 String이라면 문자열을, 객체라면 Json형식으로 바꾸어 클라이언트에 보내준다."
+  },
+  
+  {
+    "title": "섹션2. 스프링 웹 개발 기초",
+    "url": "/posts/%EC%8A%A4%ED%94%84%EB%A7%81%EC%9B%B9%EA%B0%9C%EB%B0%9C%EA%B8%B0%EC%B4%88/",
+    "categories": "강의, 스프링입문",
+    "tags": "스프링입문",
+    "date": "2022-11-26 23:00:02 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "웹 애플리케이션 계층 구조  컨트롤러: 웹 MVC의 컨트롤러 역할  서비스: 핵심 비즈니스 로직 구현  리포지토리: 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리  도메인: 비즈니스 도메인 객체, 예) 회원, 주문, 쿠폰 등등 주로 데이터베이스에 저장하고 관리됨클래스 의존관계  MemberService → Member의 서비스 → 멤버 관련...",
+    "content": "웹 애플리케이션 계층 구조  컨트롤러: 웹 MVC의 컨트롤러 역할  서비스: 핵심 비즈니스 로직 구현  리포지토리: 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리  도메인: 비즈니스 도메인 객체, 예) 회원, 주문, 쿠폰 등등 주로 데이터베이스에 저장하고 관리됨클래스 의존관계  MemberService → Member의 서비스 → 멤버 관련 비즈니스 로직 구현  MemberRepository → interface로 설계 → 나중에 변경될 수 있기 때문  MemoryMemberRepository → MemberRepository의 구현체  개발을 진행하기 위해서 초기 개발 단계에서는 구현체로 가벼운 메모리 기반의 데이터 저장소 사용테스트 작성  테스트 코드 작성 이유          준비하고 실행하는데 오래 걸린다      반복 실행하기 어렵다      여러 테스트를 한번에 실행하기 어렵다                  따라서 test폴더에 main과 동일한 폴더구조를 만들어 test 코드를 만들어 사용한다.                      테스트 작성 요령          given, when, then으로 나누어 작성        모든 테스트는 메소드 실행 순서에 관계없어야 한다  실무에서는 테스트 시 비교연산자를 통해 실제로 값을 비교하지 않음  Asserstions(assertj)를 사용해 같은지 확인  단축키 commend + shift + T로 해당 클래스 테스트 코드 작성 가능  테스트를 먼저 작성하고 개발하는 것 → 테스트 주도 개발(TDD)회원 서비스 개발  서비스 : MemberRepository를 사용하여 비즈니스 로직을 구현  회원가입, 회원 중복 확인, 회원 검색 등 회원 관련 기능을 구현Java  Optional&lt;&gt;          null이 올 수 있는 값을 감싸는 Wrapper 클래스      null을 참조하더라도 NPE가 발생하지 않도록 한다.      java 8 이후 버전에서 사용가능      메소드 반환값이 Optional이면 return Optional.ofNullable();      어노테이션  @AfterEach → 어떤 메소드가 끝나면 실행시킬 함수를 지정하는 것 → 여기서는 저장소 초기화"
+  },
+  
+  {
+    "title": "섹션1. 프로젝트 환경설정",
+    "url": "/posts/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%ED%99%98%EA%B2%BD%EC%84%A4%EC%A0%95/",
+    "categories": "강의, 스프링입문",
+    "tags": "스프링입문",
+    "date": "2022-11-26 23:00:01 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "스프링 부트 스타터 사이트 start.spring.io  Maven → 과거  Gradle → 최근  Spring Web  Thymeleaf → 템플릿 엔진프로젝트 내  build.gradle          dependencies → 스타터 사이트에서 추가했던 dependencies 라이브러리들 집합      repositories{ mavenCen...",
+    "content": "스프링 부트 스타터 사이트 start.spring.io  Maven → 과거  Gradle → 최근  Spring Web  Thymeleaf → 템플릿 엔진프로젝트 내  build.gradle          dependencies → 스타터 사이트에서 추가했던 dependencies 라이브러리들 집합      repositories{ mavenCentral() } → 라이브러리들 다운받는 공개된 사이트        gitignore          git에 올라가면 안되는 파일 설정      핵심 라이브러리스프링 부트 라이브러리  spring-boot-starter-web          spring-boot-starter-tomcat → 내장 웹서버      spring-webmvc → 스프링 웹 mvc        spring-boot-starter-thymeleaf → 타임리프 템플릿 엔진  spring-boot-starter          spring-boot                  spring-core                    spring-boot-starter-logging                  logback, slf4j                    테스트 라이브러리  spring-boot-starter-test          junit → 테스트 프레임워크      mockito → 목 라이브러리      assertj → 테스트 코드를 더 편하게 작성하도록 도와주는 라이브러리      spring-test → 스프링 통합 테스트 지원      ViewHelloController.java@Controller // 컨트롤러임을 선언public class HelloController {    @GetMapping(\"hello\") // http://localhost:8080/hello로 접속 시 캐치    public String hello(Model model){\t      model.addAttribute(\"data\",\"hello!!\"); //값을 model에 담아서 넘겨준다. 값의 key는 \"data\", value는 \"hello!!\"다.        return \"hello\"; // hello.html에 model을 넘겨줌    }}hello.html&lt;!DOCTYPE HTML&gt;&lt;html xmlns:th=\"http://www.thymeleaf.org\"&gt;&lt;head&gt;  &lt;title&gt;Hello&lt;/title&gt;  &lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /&gt;&lt;/head&gt;&lt;body&gt;&lt;p th:text=\"'안녕하세요. ' + ${data}\" &gt;안녕하세요. 손님&lt;/p&gt; &lt;!--helloController에서 보낸 model의 data --&gt;&lt;/body&gt;&lt;/html&gt;프로젝트 build 후 실행  ./gradlew build → 프로젝트 build  build/libs로 이동  java -jar “프로젝트 jar파일” → 실행"
+  },
+  
+  {
+    "title": "프로그래머스(K번째수)",
+    "url": "/posts/K%EB%B2%88%EC%A7%B8%EC%88%98/",
+    "categories": "Algo, 프로그래머스",
+    "tags": "정렬",
+    "date": "2022-11-25 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  딱히 알고리즘 알아야하는 문제가 아님  범위를 정하고 범위 내 값들을 정렬해 답을 찾아내는 문제해결import org.junit.jupiter.api.Assertions;import org.junit.jupiter.api.Test;import java.util.*;class Solution {    public int[] solution(i...",
+    "content": "첫 시도  딱히 알고리즘 알아야하는 문제가 아님  범위를 정하고 범위 내 값들을 정렬해 답을 찾아내는 문제해결import org.junit.jupiter.api.Assertions;import org.junit.jupiter.api.Test;import java.util.*;class Solution {    public int[] solution(int[] array, int[][] commands) {        int[] answer = new int[commands.length];        int T = commands.length;        for (int t = 0; t &lt; T; t++) {            int i = commands[t][0]-1;            int j = commands[t][1]-1;            int k = commands[t][2]-1;            int[] arr = new int[j - i + 1];            for (int x = i; x &lt;= j; x++) {                arr[x - i] = array[x];            }            Arrays.sort(arr);            answer[t] = arr[k];        }//        for(int a : answer){//            System.out.println(a);//        }        return answer;    }}참고  직접구현"
+  },
+  
+  {
+    "title": "10815(숫자 카드)",
+    "url": "/posts/%EC%88%AB%EC%9E%90-%EC%B9%B4%EB%93%9C/",
+    "categories": "Algo, 백준",
+    "tags": "이분탐색",
+    "date": "2022-11-25 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  N,M이 500,000이기 때문에 단순 완탐으로는 시간초과  정렬된 arr를 이분탐색  MlogN으로 해결 가능해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    static int N;    static int[] arr1;  ...",
+    "content": "첫 시도  N,M이 500,000이기 때문에 단순 완탐으로는 시간초과  정렬된 arr를 이분탐색  MlogN으로 해결 가능해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    static int N;    static int[] arr1;    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringBuilder sb = new StringBuilder();        StringTokenizer st;        N = Integer.parseInt(br.readLine());        st = new StringTokenizer(br.readLine());        arr1 = new int[N];        for (int i = 0; i &lt; N; i++) {            arr1[i] = Integer.parseInt(st.nextToken());        }        Arrays.sort(arr1);        int M = Integer.parseInt(br.readLine());        st = new StringTokenizer(br.readLine());        for (int i = 0; i &lt; M; i++) {            int num = Integer.parseInt(st.nextToken());            sb.append(binarySearch(num)+\" \");        }        System.out.println(sb);    }    public static int binarySearch(int value) {        int first = 0;        int last = N - 1;        int mid = 0;        while (first &lt;= last) {            mid = (first + last) / 2;            if (arr1[mid] == value) {                return 1;            }            if (arr1[mid] &lt; value) {                first = mid + 1;            } else {                last = mid - 1;            }        }        return 0;    }}참고  https://steady-coding.tistory.com/40"
+  },
+  
+  {
+    "title": "1927번(최소 힙)",
+    "url": "/posts/%EC%B5%9C%EC%86%8C-%ED%9E%99/",
+    "categories": "Algo, 백준",
+    "tags": "자료구조",
+    "date": "2022-11-24 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  Heap이 이진트리로 되어있는 것은 알고 있음  ArrayList로 트리 구현  인덱스를 계산해야하기 떄문에 0번은 사용 x  삽입 : list의 마지막에 값 저장, 이후 부모 노드가 더 작을 때 까지 위치 변환 반복  삭제 : 1번에 있는 값을 출력, list의 마지막 값을 1번에 저장하고 아래 자식 노드 값을 비교 -&gt; 왼쪽부터 비...",
+    "content": "첫 시도  Heap이 이진트리로 되어있는 것은 알고 있음  ArrayList로 트리 구현  인덱스를 계산해야하기 떄문에 0번은 사용 x  삽입 : list의 마지막에 값 저장, 이후 부모 노드가 더 작을 때 까지 위치 변환 반복  삭제 : 1번에 있는 값을 출력, list의 마지막 값을 1번에 저장하고 아래 자식 노드 값을 비교 -&gt; 왼쪽부터 비교 후 오른쪽 값이 있다면 오른쪽도 비교하면서 내려감해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringBuilder sb = new StringBuilder();        StringTokenizer st;        int N = Integer.parseInt(br.readLine());        ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;();        list.add(0);        for (int i = 0; i &lt; N; i++) {            int a = Integer.parseInt(br.readLine());            if(a != 0){                list.add(a);                int index = list.size() - 1;                while(index &gt; 1 &amp;&amp; list.get(index/2) &gt; a){                    int parent = list.get(index/2);                    list.set(index/2,a);                    list.set(index,parent);                    index /= 2;                }            }            else {                if(list.size() - 1 &lt; 1){                    sb.append(0+\"\\n\");                }                else {                    int deleteitem = list.get(1);                    sb.append(deleteitem + \"\\n\");                    list.set(1, list.get(list.size() - 1));                    list.remove(list.size() - 1);                    int pos = 1;                    while ((pos * 2) &lt; list.size()) {                        int min = list.get(pos * 2);                        int minPos = pos * 2;                        if (((pos * 2 + 1) &lt; list.size()) &amp;&amp; min &gt; list.get(pos * 2 + 1)) {                            min = list.get(pos * 2 + 1);                            minPos = pos * 2 + 1;                        }                        if (min &gt; list.get(pos))                            break;                        int tmp = list.get(pos);                        list.set(pos, list.get(minPos));                        list.set(minPos, tmp);                        pos = minPos;                    }                }            }        }        System.out.println(sb);    }}참고  https://st-lab.tistory.com/205  https://go-coding.tistory.com/25"
+  },
+  
+  {
+    "title": "11279번(최대 힙)",
+    "url": "/posts/%EC%B5%9C%EB%8C%80-%ED%9E%99/",
+    "categories": "Algo, 백준",
+    "tags": "자료구조",
+    "date": "2022-11-24 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  최소 힙에서 부호만 반대로 해주면 최대 힙 구현 가능해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        Buff...",
+    "content": "첫 시도  최소 힙에서 부호만 반대로 해주면 최대 힙 구현 가능해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringBuilder sb = new StringBuilder();        StringTokenizer st;        int N = Integer.parseInt(br.readLine());        ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;();        list.add(0);        for (int i = 0; i &lt; N; i++) {            int a = Integer.parseInt(br.readLine());            if(a != 0){                list.add(a);                int index = list.size() - 1;                while(index &gt; 1 &amp;&amp; list.get(index/2) &lt; a){                    int parent = list.get(index/2);                    list.set(index/2,a);                    list.set(index,parent);                    index /= 2;                }            }             else {                if(list.size() - 1 &lt; 1){                    sb.append(0+\"\\n\");                }                else {                    int deleteitem = list.get(1);                    sb.append(deleteitem + \"\\n\");                    list.set(1, list.get(list.size() - 1));                    list.remove(list.size() - 1);                    int pos = 1;                    while ((pos * 2) &lt; list.size()) {                        int max = list.get(pos * 2);                        int maxPos = pos * 2;                        if (((pos * 2 + 1) &lt; list.size()) &amp;&amp; max &lt; list.get(pos * 2 + 1)) {                            max = list.get(pos * 2 + 1);                            maxPos = pos * 2 + 1;                        }                        if (max &lt; list.get(pos))                            break;                        int tmp = list.get(pos);                        list.set(pos, list.get(maxPos));                        list.set(maxPos, tmp);                        pos = maxPos;                    }                }            }        }        System.out.println(sb);    }}참고  https://st-lab.tistory.com/205  https://go-coding.tistory.com/25"
+  },
+  
+  {
+    "title": "TreeMap",
+    "url": "/posts/TreeMap/",
+    "categories": "Java, 자료구조",
+    "tags": "Map",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "TreeMap 이란?  Map 인터페이스를 구현한 Map 구현체 중 하나  SortedMap을 implements한다TreeMap 특징  key 값으로 정렬됨  내부적으로 RedBlack Tree 사용  Compartor 구현으로 정렬 순서를 바꿀 수 있다.  get = O(logn), containsKey = O(logn), next = O(logn...",
+    "content": "TreeMap 이란?  Map 인터페이스를 구현한 Map 구현체 중 하나  SortedMap을 implements한다TreeMap 특징  key 값으로 정렬됨  내부적으로 RedBlack Tree 사용  Compartor 구현으로 정렬 순서를 바꿀 수 있다.  get = O(logn), containsKey = O(logn), next = O(logn)참고 사이트  https://genie247.tistory.com/entry/MapHashMapTreeMapHashtable-차이점  https://devlogofchris.tistory.com/41"
+  },
+  
+  {
+    "title": "Stack",
+    "url": "/posts/Stack/",
+    "categories": "Java, 자료구조",
+    "tags": "Stack",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "Stack 이란?  메모리 안 데이터들을 더욱 효율적으로 다루기 위해 만들어진 데이터 참조 방식  마지막에 들어온 데이터가 가장 먼저 나가는 LIFO(Last In First Out, 후입선출) 구조를 갖는다.  java.util 패키지 소속Stack 특징  한 쪽 끝에서만 자료를 삽입하거나 삭제할 수 있는 선형 구조  인터럽트 처라. 수식 계산. 서...",
+    "content": "Stack 이란?  메모리 안 데이터들을 더욱 효율적으로 다루기 위해 만들어진 데이터 참조 방식  마지막에 들어온 데이터가 가장 먼저 나가는 LIFO(Last In First Out, 후입선출) 구조를 갖는다.  java.util 패키지 소속Stack 특징  한 쪽 끝에서만 자료를 삽입하거나 삭제할 수 있는 선형 구조  인터럽트 처라. 수식 계산. 서브루틴 복귀 저장에 사용  자료구조 그래프의 깊이 우선 탐색(DFS)에 사용  재귀적 함수를 호출할 때 사용  삽입, 삭제는 O(1), 탐색은 O(n)구현 종류  배열 → input 사이즈를 알아야 함  리스트 → 사이즈를 몰라도 가능, 구현이 어려움          java의 Stack class는 리스트로 구현되어 있음      참고 사이트  https://bbangson.tistory.com/11  https://godsu94.tistory.com/171"
+  },
+  
+  {
+    "title": "Priority Queue",
+    "url": "/posts/Priority-Queue/",
+    "categories": "Java, 자료구조",
+    "tags": "Queue, 우선순위큐",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "Priority Queue란?  PriorityQueue란 우선순위 큐로써 일반적인 큐의 구조 FIFO(First In First Out)를 가지면서, 데이터가 들어온 순서대로 데이터가 나가는 것이 아닌 우선순위를 먼저 결정하고 그 우선순위가 높은 데이터가 먼저 나가는 자료구조이다.  PriorityQueue를 사용하기 위해선 우선순위 큐에 저장할 객...",
+    "content": "Priority Queue란?  PriorityQueue란 우선순위 큐로써 일반적인 큐의 구조 FIFO(First In First Out)를 가지면서, 데이터가 들어온 순서대로 데이터가 나가는 것이 아닌 우선순위를 먼저 결정하고 그 우선순위가 높은 데이터가 먼저 나가는 자료구조이다.  PriorityQueue를 사용하기 위해선 우선순위 큐에 저장할 객체는 필수적으로 Comparable Interface를 구현해야한다.(중요)  Queue를 implements 하는 classPriority Queue 특징      높은 우선순위의 요소를 먼저 꺼내서 처리하는 구조이다.    우선순위 큐에 들어가는 원소는 비교가 가능한 기준이 있어야한다.    내부 요소는 힙으로 구성되어 이진트리 구조로 이루어져 있다.  따라서 우선순위 큐를 이용한 정렬은 O(nlogn)이다.  우선순위를 중요시해야 하는 상황에서 주로 쓰인다.실제 사용Gillog class (Comparable Interface구현함)class Gillog implements Comparable&lt;Gillog&gt; {    private int writeRowNumber;    private String content;    public Gillog(int writeRowNumber, String content) {        this.writeRowNumber = writeRowNumber;        this.content = content;    }    public int getWriteRowNumber() {        return this.writeRowNumber;    }    public String getContent() {        return this.content;    }    @Override    public int compareTo(Gillog gillog) {        if (this.writeRowNumber &gt; gillog.getWriteRowNumber())            return 1;        else if (this.writeRowNumber &lt; gillog.getWriteRowNumber())            return -1;        return 0;    }}mainpublic static void main(String[] args) {        PriorityQueue&lt;Gillog&gt; priorityQueue = new PriorityQueue&lt;&gt;();        priorityQueue.add(new Gillog(3650, \"10년후 글\"));        priorityQueue.add(new Gillog(31, \"한달 후 글\"));        priorityQueue.add(new Gillog(1, \"첫번째 글\"));        priorityQueue.add(new Gillog(365, \"1년후 글\"));        while (!priorityQueue.isEmpty()) {            Gillog gilLog = priorityQueue.poll();            System.out.println(\"글 넘버 : \" + gilLog.getWriteRowNumber() + \" 글 내용 : \" + gilLog.getContent());        }    }참고 사이트  https://velog.io/@gillog/Java-Priority-Queue우선-순위-큐  https://velog.io/@april_5/자료구조-우선순위-큐Priority-Queue"
+  },
+  
+  {
+    "title": "Map",
+    "url": "/posts/Map/",
+    "categories": "Java, 자료구조",
+    "tags": "Map",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "Map 이란?  Link와 마찬가지로 인터페이스  Map은 리스트나 배열처럼 순차적으로 해당 요소 값을 구하지 않고 key를 통해 value를 얻는다.내용 특징  key로 value를 얻는다  key는 중복 허용x, value는 중복 가능Map 종류  HashMap  TreeMap  LinkedHashMap참고 사이트  https://devlogofc...",
+    "content": "Map 이란?  Link와 마찬가지로 인터페이스  Map은 리스트나 배열처럼 순차적으로 해당 요소 값을 구하지 않고 key를 통해 value를 얻는다.내용 특징  key로 value를 얻는다  key는 중복 허용x, value는 중복 가능Map 종류  HashMap  TreeMap  LinkedHashMap참고 사이트  https://devlogofchris.tistory.com/41"
+  },
+  
+  {
+    "title": "List",
+    "url": "/posts/List/",
+    "categories": "Java, 자료구조",
+    "tags": "List",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "List 란?  순서가 있는 데이터들의 집합  불연속적인 메모리 공간에 데이터들이 연관되며 포인터를 통해 각 데이터들이 연결  리스트는 동적으로 크기가 결정  단순  배열에 비해 데이터의 삽입, 삭제가 용이하고 메모리의 재사용성이 높음List 종류  ArrayList  LinkedList참고 사이트  https://developerbee.tistory...",
+    "content": "List 란?  순서가 있는 데이터들의 집합  불연속적인 메모리 공간에 데이터들이 연관되며 포인터를 통해 각 데이터들이 연결  리스트는 동적으로 크기가 결정  단순  배열에 비해 데이터의 삽입, 삭제가 용이하고 메모리의 재사용성이 높음List 종류  ArrayList  LinkedList참고 사이트  https://developerbee.tistory.com/147"
+  },
+  
+  {
+    "title": "LinkedList",
+    "url": "/posts/LinkedList/",
+    "categories": "Java, 자료구조",
+    "tags": "List",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "LinkedList란?  각 노드가 ‘데이터’와 ‘포인터’를 가지고 한 줄로 연결되어 있는 방식의 자료구조  자바의 List 인터페이스를 상속받은 여러 클래스 중 하나  Collection 프레임워크의 일부, java.util 패키지에 소속내용 특징  데이터를 담고 있는 노드들이 앞,뒤로 연결  데이터 삽입 시 목표 노드의 앞,뒤의 링크만 변경  Ar...",
+    "content": "LinkedList란?  각 노드가 ‘데이터’와 ‘포인터’를 가지고 한 줄로 연결되어 있는 방식의 자료구조  자바의 List 인터페이스를 상속받은 여러 클래스 중 하나  Collection 프레임워크의 일부, java.util 패키지에 소속내용 특징  데이터를 담고 있는 노드들이 앞,뒤로 연결  데이터 삽입 시 목표 노드의 앞,뒤의 링크만 변경  ArrayList에 비해 데이터의 삽입, 삭제가 용이 → 기본적으로 삽입삭제의 시간복잡도는 O(1)로 ArrayList에 비해 용이하지만 만약 삽입삭제 위치를 모른다면 위치탐색을 해야하므로 O(n)이 될 수 있음  탐색 시 순차적으로 탐색해야 하므로 탐색속도가 떨어진다      메소드 별 시간복잡도      참고 사이트  https://coding-factory.tistory.com/552  https://www.grepiu.com/post/9"
+  },
+  
+  {
+    "title": "LinkedHashMap",
+    "url": "/posts/LinkedHashMap/",
+    "categories": "Java, 자료구조",
+    "tags": "Map",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "LinkedHashMapLinkedHashMap 이란?  Map 인터페이스를 구현한 Map 구현체 중 하나  LinkedList로 저장되어 순서가 있다.내용 특징  내부적으로 LinkedList를 사용하므로 값을 출력할 때 순서대로 출력되어 나온다.  순서 말고는 HashMap과 다른 것이 없음  즉, 삽입 순서를 보장하는 HashMap이다.  get...",
+    "content": "LinkedHashMapLinkedHashMap 이란?  Map 인터페이스를 구현한 Map 구현체 중 하나  LinkedList로 저장되어 순서가 있다.내용 특징  내부적으로 LinkedList를 사용하므로 값을 출력할 때 순서대로 출력되어 나온다.  순서 말고는 HashMap과 다른 것이 없음  즉, 삽입 순서를 보장하는 HashMap이다.  get = O(1), containsKey = O(1), next = O(1)참고 사이트  https://genie247.tistory.com/entry/MapHashMapTreeMapHashtable-차이점"
+  },
+  
+  {
+    "title": "Heap",
+    "url": "/posts/Heap/",
+    "categories": "Java, 자료구조",
+    "tags": "Heap",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "Heap 이란?  최소값 및 최대값을 최대한 빠르게 찾아내기위해 특별히 고안된 자료 구조  완전 이진트리(마지막 레벨을 제외하고 모든 레벨이 완전히 채워져 있는 트리의 형태)를 기본으로 하고 있음  일종의 반정렬(상하로만 정렬, 좌우는 정렬x) 상태를 유지한다Heap 특징  트리 형태의 자료구조  힙의 종류에 따라 상 하의 관계만 중요, 좌 우는 중요...",
+    "content": "Heap 이란?  최소값 및 최대값을 최대한 빠르게 찾아내기위해 특별히 고안된 자료 구조  완전 이진트리(마지막 레벨을 제외하고 모든 레벨이 완전히 채워져 있는 트리의 형태)를 기본으로 하고 있음  일종의 반정렬(상하로만 정렬, 좌우는 정렬x) 상태를 유지한다Heap 특징  트리 형태의 자료구조  힙의 종류에 따라 상 하의 관계만 중요, 좌 우는 중요하지 않음  중복을 허용한다  최소, 최대값 조회는 O(1) → 루트의 값을 바로 가져옴  삽입, 삭제는 O(logn)Heap 종류  Max - Heap  Min - Heap참고 사이트  https://go-coding.tistory.com/25  https://shanepark.tistory.com/261"
+  },
+  
+  {
+    "title": "HashSet",
+    "url": "/posts/HashSet/",
+    "categories": "Java, 자료구조",
+    "tags": "Set",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "HashSet 이란?  HashSet은 Set의 파생클래스로 Set 인터페이스에서 지원하는 구현 클래스이다.내용 특징  중복된 원소를 허용하지 않는다.          중복을 걸러내는 과정                  HashSet은 객체를 저장하기 전에 먼저 객체의 hashCode()메소드를 호출해서 해시 코드를 얻어낸 다음 저장되어 있는 객체들의...",
+    "content": "HashSet 이란?  HashSet은 Set의 파생클래스로 Set 인터페이스에서 지원하는 구현 클래스이다.내용 특징  중복된 원소를 허용하지 않는다.          중복을 걸러내는 과정                  HashSet은 객체를 저장하기 전에 먼저 객체의 hashCode()메소드를 호출해서 해시 코드를 얻어낸 다음 저장되어 있는 객체들의 해시 코드와 비교한 뒤 같은 해시 코드가 있다면 다시 equals() 메소드로 두 객체를 비교해서 true가 나오면 동일한 객체로 판단하고 중복 저장을 하지 않습니다.          문자열을 HashSet에 저장할 경우, 같은 문자열을 갖는 String객체는 동일한 객체로 간주되고 다른 문자열을 갖는 String객체는 다른 객체로 간주되는데, 그 이유는 String클래스가 hashCode()와 equals() 메소드를 재정의해서 같은 문자열일 경우 hashCode()의 리턴 값을 같게, equals()의 리턴 값은 true가 나오도록 했기 때문입니다.          HashSet&lt;Word&gt; set = new HashSet&lt;&gt;();  이런식으로 어떤 클래스를 원소로 HashSet을 생성하는 경우에는 항상 다른 객체로 간주되므로 인스턴스 변수의 값이 중복될 수 있다.                      순서를 고려하지 않는다.  null 요소를 허용한다.  내부적으로 HashMap을 사용하여 데이터를 저장한다.실제 사용Set&lt;String&gt; fruits = new HashSet&lt;&gt;();fruits.add(\"apple\");fruits.add(\"banana\");fruits.add(\"kiwi\");System.out.println(\"fruits: \" + fruits);참고 사이트  https://crazykim2.tistory.com/474  https://codechacha.com/ko/java-collections-hashset/#11-중복된-값과-null-저장"
+  },
+  
+  {
+    "title": "HashMap",
+    "url": "/posts/HashMap/",
+    "categories": "Java, 자료구조",
+    "tags": "Map",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "HashMapHashMap 이란?  Map 인터페이스를 구현한 Map 구현체 중 하나로 가장 많이 사용된다  해시 알고리즘(hash algorithm)을 사용하여 많은 양의 데이터를 검색하는데 검색 속도가 매우 빠르다.HashMap 특징  key와 value를 묶어 하나의 entry로 저장한다  내부적으로 array 사용 → index 계산은 내부 해...",
+    "content": "HashMapHashMap 이란?  Map 인터페이스를 구현한 Map 구현체 중 하나로 가장 많이 사용된다  해시 알고리즘(hash algorithm)을 사용하여 많은 양의 데이터를 검색하는데 검색 속도가 매우 빠르다.HashMap 특징  key와 value를 묶어 하나의 entry로 저장한다  내부적으로 array 사용 → index 계산은 내부 해쉬 함수로 계산  value에 null값 허용  순서를 유지하지 않는다  정렬 안됨  get = O(1), containsKey = O(1), next = O(h/n)참고 사이트  https://wikidocs.net/208  https://devlogofchris.tistory.com/41  https://genie247.tistory.com/entry/MapHashMapTreeMapHashtable-차이점  https://www.grepiu.com/post/9"
+  },
+  
+  {
+    "title": "Deque",
+    "url": "/posts/Deque/",
+    "categories": "Java, 자료구조",
+    "tags": "Queue, Deque",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "Deque란?  Queue의 양쪽으로 엘리먼트의 삽입과 삭제를 수행할 수 있는 자료구조  Doubel-Ended Queue의 줄임말  java.util 패키지 소속Deque 특징  Deque는 인터페이스로 구현되어 있음 → ArrayDeque, LinkedList 등의 구현체 존재  null 허용 안함  사용하기에 따라 Stack, LinkedList...",
+    "content": "Deque란?  Queue의 양쪽으로 엘리먼트의 삽입과 삭제를 수행할 수 있는 자료구조  Doubel-Ended Queue의 줄임말  java.util 패키지 소속Deque 특징  Deque는 인터페이스로 구현되어 있음 → ArrayDeque, LinkedList 등의 구현체 존재  null 허용 안함  사용하기에 따라 Stack, LinkedList 보다 빠를 수 있음  Queue와 마찬가지로 삽입,삭제는 O(1), 조회는 O(n)이다.참고 사이트  https://soft.plusblog.co.kr/24  https://www.geeksforgeeks.org/deque-interface-java-example/"
+  },
+  
+  {
+    "title": "ArrayList",
+    "url": "/posts/ArrayList/",
+    "categories": "Java, 자료구조",
+    "tags": "",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "ArrayList란?  크기가 가변적으로 변할 수 있는 배열  내부적으로 배열을 사용해 데이터를 저장  자바의 List 인터페이스를 상속받은 여러 클래스 중 하나  Collection 프레임워크의 일부, java.util 패키지에 소속ArrayList특징  크기가 고정된 배열과 달리 데이터가 추가될 때 자동으로 크기가 증가  배열과 마찬가지로 inde...",
+    "content": "ArrayList란?  크기가 가변적으로 변할 수 있는 배열  내부적으로 배열을 사용해 데이터를 저장  자바의 List 인터페이스를 상속받은 여러 클래스 중 하나  Collection 프레임워크의 일부, java.util 패키지에 소속ArrayList특징  크기가 고정된 배열과 달리 데이터가 추가될 때 자동으로 크기가 증가  배열과 마찬가지로 index로 검색 가능  LinkedList에 비해 검색이 용이  내부적으로 배열을 사용하므로 LinkedList에 비해 데이터 삽입, 삭제 성능이 떨어진다      메소드 별 시간복잡도      참고 사이트  https://psychoria.tistory.com/765  https://onlyfor-me-blog.tistory.com/249  https://www.grepiu.com/post/9"
+  },
+  
+  {
+    "title": "프로그래머스(타겟 넘버)",
+    "url": "/posts/%ED%83%80%EA%B2%9F%EB%84%98%EB%B2%84/",
+    "categories": "Algo, 프로그래머스",
+    "tags": "bfs, dfs",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  배열크기가 20까지, +,- 두 가지 연산이 필요하므로 2^20 → 10^6  단순하게 브루트 포스로 해결 가능  백준과 답안작성 방법이 달라 꽤나 고생, 적응에 시간이 걸릴듯해결  내용class Solution {    int[] numbers;    int target;    int answer;    void dfs(int index,...",
+    "content": "첫 시도  배열크기가 20까지, +,- 두 가지 연산이 필요하므로 2^20 → 10^6  단순하게 브루트 포스로 해결 가능  백준과 답안작성 방법이 달라 꽤나 고생, 적응에 시간이 걸릴듯해결  내용class Solution {    int[] numbers;    int target;    int answer;    void dfs(int index, int sum){        if(index == numbers.length){            if(sum == target) answer++;            return;        }        dfs(index+1, sum+numbers[index]);        dfs(index+1, sum-numbers[index]);    }    public int solution(int[] numbers, int target) {        answer = 0;        this.numbers = numbers;        this.target = target;        dfs(0,0);        return answer;    }}참고  https://www.youtube.com/watch?v=S2JDw9oNNDk"
+  },
+  
+  {
+    "title": "프로그래머스(단어 변환)",
+    "url": "/posts/%EB%8B%A8%EC%96%B4-%EB%B3%80%ED%99%98/",
+    "categories": "Algo, 프로그래머스",
+    "tags": "bfs, dfs",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  dfs와 백트래킹을 이용하여 문제를 해결  먼저 word 배열 순회하면서 begin과 다른 단어가 1개인지 확인 → 배열의 크기 n이 50, 문자열의 길이m이 10까지라서 완전탐색 사용가능 → O(n^2m) → 2,500번  bfs가 아닌 dfs를 사용하므로 다시 return하기 전에 배열은 false로 바꿔줘야함(백트래킹)  begin과 ...",
+    "content": "첫 시도  dfs와 백트래킹을 이용하여 문제를 해결  먼저 word 배열 순회하면서 begin과 다른 단어가 1개인지 확인 → 배열의 크기 n이 50, 문자열의 길이m이 10까지라서 완전탐색 사용가능 → O(n^2m) → 2,500번  bfs가 아닌 dfs를 사용하므로 다시 return하기 전에 배열은 false로 바꿔줘야함(백트래킹)  begin과 target이 같으면 해당 count를 return  begin을 전역변수로 두고 사용하다가 채점 시 오답으로 나옴 → 백트래킹 하면서 begin을 다시 되돌려놓지 않음 → 함수 파라미터로 begin을 넘겨줌 → 백트래킹 시 자동으로 되돌려짐 → 해결    해결    내용import org.junit.jupiter.api.Assertions;import org.junit.jupiter.api.Test;class Solution {    String target;    String[] words;    boolean[] check;    int min = Integer.MAX_VALUE;/**     * true면 해당 단어로 바꿀 수 있음*@paramindex*/boolean countDiff(int index, String begin){        boolean result = false;        int count = 0;        String temp = words[index];        for(int i = 0; i&lt;temp.length(); i++){ // 최대 10번            char a = begin.charAt(i);            char b = temp.charAt(i);            if(a != b) count++;        }        if(count == 1 ) result = true; // 다른게 하나라면 true;        return result;    }    int dfs(String begin,int count){        if(begin.equals(target)){            return count;        }        for(int i = 0; i&lt; words.length; i++){            if(!check[i] &amp;&amp; countDiff(i,begin)){                check[i] = true;                min = Math.min(min, dfs(words[i],count+1));                check[i] = false;            }        }        return min;    }    public int solution(String begin, String target, String[] words) {        int answer = 0;        this.target = target;        this.words = words;        check = new boolean[words.length];        answer = dfs(begin,0);        if(answer == Integer.MAX_VALUE) answer = 0;        return answer;    }}참고  직접구현"
+  },
+  
+  {
+    "title": "프로그래머스(네트워크)",
+    "url": "/posts/%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/",
+    "categories": "Algo, 프로그래머스",
+    "tags": "bfs, dfs",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  dfs를 이용하여 연결된 네트워크를 전부 순회, 순회되지 않은 네트위크를 발견할 때 마다 answer 증가  check를 만들어 이미 방문한 네트워크인지 확인 &amp; i와 j가 같으면 본인 네트워크이므로 다를때만 통과  n이 200이라 n^3까지 가능  간단한 dfs문제해결import org.junit.jupiter.api.Asserti...",
+    "content": "첫 시도  dfs를 이용하여 연결된 네트워크를 전부 순회, 순회되지 않은 네트위크를 발견할 때 마다 answer 증가  check를 만들어 이미 방문한 네트워크인지 확인 &amp; i와 j가 같으면 본인 네트워크이므로 다를때만 통과  n이 200이라 n^3까지 가능  간단한 dfs문제해결import org.junit.jupiter.api.Assertions;import org.junit.jupiter.api.Test;class Solution {    int[][] computers;    boolean[] check;    int n;    boolean[] dfs(int i) {        check[i] = true;        for (int j = 0; j &lt; n; j++) {            if (i != j &amp;&amp; computers[i][j] == 1 &amp;&amp; check[j] == false) {                check = dfs(j);            }        }        return check;    }    public int solution(int n, int[][] computers) {        int answer = 0;        this.computers = computers;        this.n = n;        check = new boolean[n];        System.out.println(n);        for (int i = 0; i &lt; n; i++) {            if (!check[i]) {                dfs(i);                answer++;            }        }        return answer;    }}참고  https://velog.io/@ajufresh/프로그래머스-네트워크-문제풀이-Java"
+  },
+  
+  {
+    "title": "프로그래머스(게임 맵 최단거리)",
+    "url": "/posts/%EA%B2%8C%EC%9E%84-%EB%A7%B5-%EC%B5%9C%EB%8B%A8%EA%B1%B0%EB%A6%AC/",
+    "categories": "Algo, 프로그래머스",
+    "tags": "bfs, dfs",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  dfs로 풀 수 있을 것 같았는데 bfs가 더 효율적일 것 같아 bfs로 해결  bfs로 순회 시 목적지에 먼저 도착하는 거리가 필연적으로 최소값  목적지에 도착하지 못한다면 return -1  가독성을 위해 class를 만들어 순회했지만 효율성 측면에서 별로인지 효율성 테스트 실패  class가 아닌 배열로 bfs 구현해결import or...",
+    "content": "첫 시도  dfs로 풀 수 있을 것 같았는데 bfs가 더 효율적일 것 같아 bfs로 해결  bfs로 순회 시 목적지에 먼저 도착하는 거리가 필연적으로 최소값  목적지에 도착하지 못한다면 return -1  가독성을 위해 class를 만들어 순회했지만 효율성 측면에서 별로인지 효율성 테스트 실패  class가 아닌 배열로 bfs 구현해결import org.junit.jupiter.api.Assertions;import org.junit.jupiter.api.Test;import javax.management.remote.rmi._RMIConnection_Stub;import javax.xml.soap.Node;import java.util.LinkedList;import java.util.Queue;class Solution {    int[][] maps;    int[] dr = {0,-1,0,1};    int[] dc = {-1,0,1,0};    int bfs(){        int n = maps.length;        int m = maps[0].length;        boolean[][] check = new boolean[n][m];        Queue&lt;int[]&gt; q = new LinkedList&lt;&gt;();        q.add(new int[] {0,0,1});        while (!q.isEmpty()) {            int[] temp = q.poll();            int r = temp[0];            int c = temp[1];            int count = temp[2];            if(r == n-1 &amp;&amp; c == m-1){                return count;            }            for(int i = 0; i &lt; 4; i++){                int nr = r + dr[i];                int nc = c + dc[i];                if(nr &lt; 0 || nr &gt;= n || nc &lt; 0 || nc &gt;= m || check[nr][nc] || maps[nr][nc] == 0) continue;                q.add(new int[] {nr,nc,count+1});                check[nr][nc] = true;            }        }        return -1;    }    public int solution(int[][] maps) {        this.maps = maps;        int result = bfs();        return result;    }    class Node{        int r;        int c;        int count;        public Node(int r, int c, int count) {            this.r = r;            this.c = c;            this.count = count;        }    }}참고  직접구현"
+  },
+  
+  {
+    "title": "10845번(큐)",
+    "url": "/posts/%ED%81%90/",
+    "categories": "Algo, 백준",
+    "tags": "자료구조",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  java에서 큐는 리스트로 구현되어 있다  LinkedList를 사용해서 구현해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException...",
+    "content": "첫 시도  java에서 큐는 리스트로 구현되어 있다  LinkedList를 사용해서 구현해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringBuilder sb = new StringBuilder();        int N = Integer.parseInt(br.readLine());        LinkedListQueue q = new LinkedListQueue();        for (int i = 0; i &lt; N; i++) {            String[] input = br.readLine().split(\" \");            String commend = input[0];            switch (commend){                case \"push\":                    int num = Integer.parseInt(input[1]);                    q.push(num);                    break;                case \"pop\":                    sb.append(q.pop()).append(\"\\n\");                    break;                case \"size\":                    sb.append(q.size()).append(\"\\n\");                    break;                case \"empty\":                    sb.append(q.empty()).append(\"\\n\");                    break;                case \"front\":                    sb.append(q.front()).append(\"\\n\");                    break;                case \"back\":                    sb.append(q.back()).append(\"\\n\");                    break;            }        }        System.out.println(sb.toString());    }}class Node{    int data;    Node next;    public Node(int data) {        this.data = data;        this.next = null;    }}class LinkedListQueue{    Node head;    Node tail;    int size;    public LinkedListQueue() {        this.head = null;        this.tail = null;        this.size = 0;    }    public void push(Integer x){        Node nNode = new Node(x);        if(size == 0){            head = nNode;        }        else{            tail.next = nNode;        }        tail = nNode;        size++;    }    public int pop(){        int result = -1;        if(size != 0){            result = head.data;            head = head.next;            size--;        }        return result;    }    public int size(){        return size;    }    public int empty(){        int result = 1;        if(size != 0){            result = 0;        }        return result;    }    public int front(){        int result = -1;        if(size != 0){            result = head.data;        }        return result;    }    public int back(){        int result = -1;        if(size != 0){            result = tail.data;        }        return result;    }}참고  https://st-lab.tistory.com/184"
+  },
+  
+  {
+    "title": "10828번(스택)",
+    "url": "/posts/%EC%8A%A4%ED%83%9D/",
+    "categories": "Algo, 백준",
+    "tags": "자료구조",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  스택은 다음을 사용하여 구현할 수 있다.          배열      리스트        배열을 이용하여 구현하였다.해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ...",
+    "content": "첫 시도  스택은 다음을 사용하여 구현할 수 있다.          배열      리스트        배열을 이용하여 구현하였다.해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringBuilder sb = new StringBuilder();        int N = Integer.parseInt(br.readLine());        Stack st = new Stack(N);        for (int i = 0; i &lt; N; i++) {            String[] input = br.readLine().split(\" \");            String commend = input[0];            switch (commend){                case \"push\":                    int num = Integer.parseInt(input[1]);                    st.push(num);                    break;                case \"pop\":                    sb.append(st.pop()).append(\"\\n\");                    break;                case \"size\":                    sb.append(st.size()).append(\"\\n\");                    break;                case \"empty\":                    sb.append(st.empty()).append(\"\\n\");                    break;                case \"top\":                    sb.append(st.top()).append(\"\\n\");                    break;            }        }        System.out.println(sb.toString());    }}class Stack{    int top;    int[] arr;    public Stack(int size) {        this.top = -1;        this.arr = new int[size];    }    public boolean push(int input){        arr[++top] = input;        return true;    }    public int pop(){        int temp = -1;        if(!(top == -1)){            temp = arr[top];            arr[top--] = 0;        }        return temp;    }    public int size(){        return top+1;    }    public int empty(){        int temp = 1;        if(!(top == -1)){            temp = 0;        }        return temp;    }    public int top(){        int temp = -1;        if(!(top == -1)){            temp = arr[top];        }        return temp;    }}참고  직접구현"
+  },
+  
+  {
+    "title": "10866번(덱)",
+    "url": "/posts/%EB%8D%B1/",
+    "categories": "Algo, 백준",
+    "tags": "자료구조",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  단순히 Queue를 만들었을때처럼 단일(단방향) 연결리스트로 시도  pop_back을 할 때 tail의 data를 반환하고 tail의 이전노드를 tail로 만들어줘야 하는데 tail의 이전노드 정보가 없음  단일 연결리스트로 만들게 된다면 끝 노드를 찾기 위해 모든 노드를 거쳐가야 하므로 O(n)  따라서 이전 노드정보를 가지고 있어 양방향...",
+    "content": "첫 시도  단순히 Queue를 만들었을때처럼 단일(단방향) 연결리스트로 시도  pop_back을 할 때 tail의 data를 반환하고 tail의 이전노드를 tail로 만들어줘야 하는데 tail의 이전노드 정보가 없음  단일 연결리스트로 만들게 된다면 끝 노드를 찾기 위해 모든 노드를 거쳐가야 하므로 O(n)  따라서 이전 노드정보를 가지고 있어 양방향으로 연결이 가능항 이중(양방향) 연결리스트로 구현해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringBuilder sb = new StringBuilder();        int N = Integer.parseInt(br.readLine());        LinkedListQueue q = new LinkedListQueue();        for (int i = 0; i &lt; N; i++) {            String[] input = br.readLine().split(\" \");            String commend = input[0];            int num = 0;            switch (commend){                case \"push_front\":                    num = Integer.parseInt(input[1]);                    q.push_front(num);                    break;                case \"push_back\":                    num = Integer.parseInt(input[1]);                    q.push_back(num);                    break;                case \"pop_front\":                    sb.append(q.pop_front()).append(\"\\n\");                    break;                case \"pop_back\":                    sb.append(q.pop_back()).append(\"\\n\");                    break;                case \"size\":                    sb.append(q.size()).append(\"\\n\");                    break;                case \"empty\":                    sb.append(q.empty()).append(\"\\n\");                    break;                case \"front\":                    sb.append(q.front()).append(\"\\n\");                    break;                case \"back\":                    sb.append(q.back()).append(\"\\n\");                    break;            }        }        System.out.println(sb.toString());    }}class Node{    int data;    Node next;    Node prev;    public Node(int data) {        this.data = data;        this.next = null;        this.prev = null;    }}class LinkedListQueue{    Node head;    Node tail;    int size;    public LinkedListQueue() {        this.head = null;        this.tail = null;        this.size = 0;    }    public void push_front(Integer x){        Node nNode = new Node(x);        nNode.next = head;        if(head != null){            head.prev = nNode;        }        head = nNode;        size++;        if(head.next == null){            tail = head;        }    }    public void push_back(Integer x){        Node nNode = new Node(x);        if(size == 0){            push_front(x);        }        else {            tail.next = nNode;            nNode.prev = tail;            tail = nNode;            size++;        }    }    public int pop_front(){        int result = -1;        if(size == 0){            return result;        }        int temp = head.data;        Node nextNode = head.next;        head.data = 0;        head.next = null;        if (nextNode != null) {            nextNode.prev = null;        }        head = null;        head = nextNode;        size--;        if(size == 0) {            tail = null;        }        result = temp;        return result;    }    public int pop_back(){        int result = -1;        if(size == 0){            return result;        }        int temp = tail.data;        Node prevNode = tail.prev;        tail.data = 0;        tail.prev = null;        if(prevNode != null){            prevNode.next = null;        }        tail = null;        tail = prevNode;        size--;        if(size == 0){            head = null;        }        result = temp;        return result;    }    public int size(){        return size;    }    public int empty(){        int result = 1;        if(size != 0){            result = 0;        }        return result;    }    public int front(){        int result = -1;        if(size != 0){            result = head.data;        }        return result;    }    public int back(){        int result = -1;        if(size != 0){            result = tail.data;        }        return result;    }}참고  https://st-lab.tistory.com/187"
+  },
+  
+  {
+    "title": "1181번(단어정렬)",
+    "url": "/posts/%EB%8B%A8%EC%96%B4%EC%A0%95%EB%A0%AC/",
+    "categories": "Algo, 백준",
+    "tags": "정렬",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  조건          단어의 길이      단어의 사전 순        시간제한은 2초, N = 2 * 10^4이므로 N^2으로 해결하기에는 시간이 아슬아슬  Collections.sort로 조건을 설정해 정렬 → O(N+nlogn)  HashSet을 사용해 중복을 제거하려 했지만 클래스를 원소로 사용하게 되면 인스턴스 변수의 중복확인이 불...",
+    "content": "첫 시도  조건          단어의 길이      단어의 사전 순        시간제한은 2초, N = 2 * 10^4이므로 N^2으로 해결하기에는 시간이 아슬아슬  Collections.sort로 조건을 설정해 정렬 → O(N+nlogn)  HashSet을 사용해 중복을 제거하려 했지만 클래스를 원소로 사용하게 되면 인스턴스 변수의 중복확인이 불가능하므로 중복되어 저장됨import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        int N = Integer.parseInt(br.readLine());        HashSet&lt;Word&gt; set = new HashSet&lt;&gt;();        for (int i = 0; i &lt; N; i++) {            String input = br.readLine();            set.add(new Word(input,input.length()));        }        List&lt;Word&gt; list = new LinkedList(set); // set은 Collections.sort 사용 불가능, list로 변환        Collections.sort(list);        for (int i = 0; i &lt; list.size(); i++) {            Word a = list.get(i);            System.out.println(a.value);        }    }}class Word implements Comparable&lt;Word&gt;{    String value;    int length;    Word(String value, int length) {        this.value = value;        this.length = length;    }    @Override    public int compareTo(Word o) {        if(this.length == o.length){           return this.value.compareTo(o.value);        }        else if(this.length &gt; o.length){            return 1;        }        else {            return -1;        }    }}해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        int N = Integer.parseInt(br.readLine());        HashSet&lt;String&gt; set = new HashSet&lt;&gt;();        for (int i = 0; i &lt; N; i++) {            String input = br.readLine();            set.add(input);        }        List&lt;String&gt; list = new LinkedList(set); // set은 Collections.sort 사용 불가능, list로 변환        Collections.sort(list, new Comparator&lt;String&gt;() {            @Override            public int compare(String o1, String o2) {                if(o1.length() == o2.length()){                    return o1.compareTo(o2);                }                else {                    return o1.length() - o2.length();                }            }        });        for (int i = 0; i &lt; list.size(); i++) {            System.out.println(list.get(i));        }    }}참고  직접구현"
+  },
+  
+  {
+    "title": "10814번(나이순 정렬)",
+    "url": "/posts/%EB%82%98%EC%9D%B4%EC%88%9C-%EC%A0%95%EB%A0%AC/",
+    "categories": "Algo, 백준",
+    "tags": "정렬",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  조건          나이가 어린 순      먼저 가입한 순        Person 클래스를 생성하고 이를 원소로 하는 LinkedList 생성  Person에 Comparable을 implements해 compareTo 구현, Collections.sort로 정렬  N = 100000, 시간 제한 3초 → 2N + nlogn로 충분할 ...",
+    "content": "첫 시도  조건          나이가 어린 순      먼저 가입한 순        Person 클래스를 생성하고 이를 원소로 하는 LinkedList 생성  Person에 Comparable을 implements해 compareTo 구현, Collections.sort로 정렬  N = 100000, 시간 제한 3초 → 2N + nlogn로 충분할 것으로 예상 → 왜 시간초과?import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        StringBuilder sb = new StringBuilder();        int N = Integer.parseInt(br.readLine());        List&lt;Person&gt; list = new LinkedList&lt;&gt;();        for (int i = 0; i &lt; N; i++) {            String[] input = br.readLine().split(\" \");            int age = Integer.parseInt(input[0]);            String name = input[1];            list.add(new Person(age,name,i));        }        Collections.sort(list);        for (int i = 0; i &lt; list.size(); i++) {            Person temp = list.get(i);            sb.append(temp.age).append(\" \").append(temp.name).append(\"\\n\");        }        System.out.println(sb.toString());    }}class Person implements Comparable&lt;Person&gt;{    int age;    String name;    int id;    public Person(int age, String name, int id) {        this.age = age;        this.name = name;        this.id = id;    }    @Override    public int compareTo(Person o) {        if(this.age == o.age){            return this.id - o.id;        }        else {            return this.age - o.age;        }    }}해결  LinkedList로 list를 구현한게 문제  LinkedList의 get메소드 시간복잡도는 O(n) → 값 출력 시 N^2  2N + nlogn (예상) → N + nlongn + N^2 (실제)  ArrayList로 변경 → get메소드 시간복잡도 O(1) → 값 출력 시간복잡도 Nimport java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        StringBuilder sb = new StringBuilder();        int N = Integer.parseInt(br.readLine());        ArrayList&lt;Person&gt; list = new ArrayList&lt;&gt;();        for (int i = 0; i &lt; N; i++) {            String[] input = br.readLine().split(\" \");            int age = Integer.parseInt(input[0]);            String name = input[1];            list.add(new Person(age,name,i));        }        Collections.sort(list);        for (int i = 0; i &lt; list.size(); i++) {            Person temp = list.get(i);            sb.append(temp.age).append(\" \").append(temp.name).append(\"\\n\");        }        System.out.println(sb.toString());    }}class Person implements Comparable&lt;Person&gt;{    int age;    String name;    int id;    public Person(int age, String name, int id) {        this.age = age;        this.name = name;        this.id = id;    }    @Override    public int compareTo(Person o) {        if(this.age == o.age){            return this.id - o.id;        }        else {            return this.age - o.age;        }    }}참고  직접구현"
+  },
+  
+  {
+    "title": "21773번(가희와 프로세스1)",
+    "url": "/posts/%EA%B0%80%ED%9D%AC%EC%99%80-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A41/",
+    "categories": "Algo, 백준",
+    "tags": "우선순위큐",
+    "date": "2022-11-23 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  시간복잡도를 계산하지 않고 완전탐색으로 시도  우선순위가 가장 높은 프로세스를 실행하고 나머지 프로세스들의 값 변경  Collections.sort로 우선순위에 맞게 정렬  시간복잡도가 T * n = 10^11이므로 시간초과해결  우선순위 큐 사용  java에서 우선순위 큐를 사용해보지 않아 이번기회에 공부import java.io.*;im...",
+    "content": "첫 시도  시간복잡도를 계산하지 않고 완전탐색으로 시도  우선순위가 가장 높은 프로세스를 실행하고 나머지 프로세스들의 값 변경  Collections.sort로 우선순위에 맞게 정렬  시간복잡도가 T * n = 10^11이므로 시간초과해결  우선순위 큐 사용  java에서 우선순위 큐를 사용해보지 않아 이번기회에 공부import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        StringBuilder sb = new StringBuilder();        st = new StringTokenizer(br.readLine());        int T = Integer.parseInt(st.nextToken());        int n = Integer.parseInt(st.nextToken());        PriorityQueue&lt;Process&gt; q = new PriorityQueue&lt;&gt;();        for(int i = 0; i&lt;n; i++){            st = new StringTokenizer(br.readLine());            int id = Integer.parseInt(st.nextToken());            int sec = Integer.parseInt(st.nextToken());            int prio = Integer.parseInt(st.nextToken());            q.offer(new Process(id, sec, prio));        }        for(int i = 0; i&lt;T; i++){            if (q.isEmpty()) { //  프로세스가 없을 시 종료                break;            }            Process ps = q.poll();            sb.append(ps.id+\"\\n\");            if(ps.sec == 1){ // 남은 시간이 1초면 continue, 큐에 다시 넣을 필요 없음                continue;            }            // 현재 프로세스의 prio를 감소시키면 다른 프로세스의 prio를 증가시키는 것과 동일, n번 반복할 필요 x            q.offer(new Process(ps.id, ps.sec - 1, ps.prio - 1));        }        System.out.println(sb.toString());    }}class Process implements Comparable&lt;Process&gt;{    int id;    int sec;    int prio;    Process(int id, int sec, int prio){        this.id = id;        this.sec = sec;        this.prio = prio;    }    @Override    public int compareTo(Process o) {        if(this.prio == o.prio){            return this.id - o.id;        }        return o.prio - this.prio;    }}참고  https://gre-eny.tistory.com/289"
+  },
+  
+  {
+    "title": "5121번(지구 온난화)",
+    "url": "/posts/%EC%A7%80%EA%B5%AC%EC%98%A8%EB%82%9C%ED%99%94/",
+    "categories": "Algo, 백준",
+    "tags": "bfs",
+    "date": "2022-11-23 18:40:01 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  bfs 변형문제  주변의 섬의 개수가 2개 미만이라면 바다로 변경  출력시 바다만 있는 행,열은 생략이 되어야 하기 때문에 왼쪽 상단 꼭짓점의 좌표, 오른쪽 하단 꼭짓점의 좌표를 이중 for문으로 완전 탐색  입력, 섬 갯수 카운트, 섬을 바다로 변경, 꼭짓점 계산, 출력까지 5번의 이중 for문 사용 → 5RC의 시간복잡도해결import ...",
+    "content": "첫 시도  bfs 변형문제  주변의 섬의 개수가 2개 미만이라면 바다로 변경  출력시 바다만 있는 행,열은 생략이 되어야 하기 때문에 왼쪽 상단 꼭짓점의 좌표, 오른쪽 하단 꼭짓점의 좌표를 이중 for문으로 완전 탐색  입력, 섬 갯수 카운트, 섬을 바다로 변경, 꼭짓점 계산, 출력까지 5번의 이중 for문 사용 → 5RC의 시간복잡도해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    static String[][]input;    static int[]dr= {0, -1, 0, 1};    static int[]dc= {-1, 0, 1, 0};    static intR,C;    static String[][]map;    static LinkedList&lt;Node&gt;list= new LinkedList&lt;&gt;();    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        st = new StringTokenizer(br.readLine());        R= Integer.parseInt(st.nextToken());        C= Integer.parseInt(st.nextToken());        map= new String[R][C];        for(int i = 0; i&lt;R; i++){            String[] input = br.readLine().split(\"\");            for(int j = 0; j&lt;C; j++){                map[i][j] = input[j];            }        }        for(int i =0 ;i&lt;R; i++){            for(int j = 0; j&lt;C; j++){                if(map[i][j].equals(\"X\")){                    bfs(i,j);                }            }        }        for(int i = 0; i&lt;list.size(); i++){            int a =list.get(i).r;            int b =list.get(i).c;            map[a][b] = \".\";        }        int x = Integer.MAX_VALUE;        int y = Integer.MAX_VALUE;        int a = 0;        int b = 0;        for (int i = 0; i &lt;R; i++) {            for (int j = 0; j &lt;C; j++) {                if(map[i][j].equals(\"X\")){                    x = Math.min(x,i);                    y = Math.min(y,j);                    a = Math.max(a,i);                    b = Math.max(b,j);                }            }        }        for(int i = x; i&lt;=a; i++){            for(int j = y; j&lt;=b; j++){                System.out.print(map[i][j]);            }            System.out.println();        }    }    static void bfs(int r, int c){        int landNum = 0;        for(int i = 0; i&lt;4; i++) {            int nr = r +dr[i];            int nc = c +dc[i];            if(nr &lt; 0 || nr &gt;=R|| nc &lt; 0 || nc &gt;=C) {                continue;            }            if (map[nr][nc].equals(\"X\")) landNum++;        }        if (landNum &lt; 2) {            list.add(new Node(r,c));        }    }}class Node{    int r;    int c;    public Node(int r, int c) {        this.r = r;        this.c = c;    }}참고  직접구현"
+  },
+  
+  {
+    "title": "작성 양식2",
+    "url": "/posts/%EC%9E%91%EC%84%B1-%EC%96%91%EC%8B%9D2/",
+    "categories": "Blogging, Tutorial",
+    "tags": "Write",
+    "date": "2022-11-23 14:10:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "TitlesH1 - headingH2 - headingH3 - headingH4 - headingListsOrdered list  Firstly  Secondly  ThirdlyUnordered list  Chapter          Section                  Paragraph                    ToDo list  ...",
+    "content": "TitlesH1 - headingH2 - headingH3 - headingH4 - headingListsOrdered list  Firstly  Secondly  ThirdlyUnordered list  Chapter          Section                  Paragraph                    ToDo list  Job          Step 1      Step 2      Step 3      Description list  Sun  the star around which the earth orbits  Moon  the natural satellite of the earth, visible by reflected light from the sunBlock Quote  This line shows the block quote.Prompts  An example showing the tip type prompt.  An example showing the info type prompt.  An example showing the warning type prompt.  An example showing the danger type prompt.Tables            Company      Contact      Country                  Alfreds Futterkiste      Maria Anders      Germany              Island Trading      Helen Bennett      UK              Magazzini Alimentari Riuniti      Giovanni Rovelli      Italy      Linkshttp://127.0.0.1:4000FootnoteClick the hook will locate the footnote1, and here is another footnote2.Images  Default (with caption)Full screen width and center alignment  Shadowshadow effect (visible in light mode)  Left aligned      Float to left    Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum. Phasellus a tortor aliquam, tristique felis sit amet, elementum enim. Integer vestibulum vitae nulla nec pretium.        Float to right    Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum. Phasellus a tortor aliquam, tristique felis sit amet, elementum enim. Integer vestibulum vitae nulla nec pretium.  Mermaid SVG gantt  title  Adding GANTT diagram functionality to mermaid  apple :a, 2017-07-20, 1w  banana :crit, b, 2017-07-23, 1d  cherry :active, c, after b a, 1dMathematicsThe mathematics powered by MathJax:\\[\\sum_{n=1}^\\infty 1/n^2 = \\frac{\\pi^2}{6}\\]When $a \\ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are\\[x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}\\]Inline codeThis is an example of Inline Code.FilepathHere is the /path/to/the/file.extend.Code blockCommonThis is a common code snippet, without syntax highlight and line number.Specific LanguagesConsole$ env |grep SHELLSHELL=/usr/local/bin/bashPYENV_SHELL=bashShellif [ $? -ne 0 ]; then    echo \"The command was not successful.\";    #do the needful / exitfi;Specific filename@import  \"colors/light-typography\",  \"colors/dark-typography\"Reverse Footnote            The footnote source &#8617;              The 2nd footnote source &#8617;      "
+  },
+  
+  {
+    "title": "작성 양식1",
+    "url": "/posts/%EC%9E%91%EC%84%B1-%EC%96%91%EC%8B%9D1/",
+    "categories": "Blogging, Tutorial",
+    "tags": "Write",
+    "date": "2022-11-23 13:30:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "서론 작성하는 곳강조, 하이퍼링크 작성 방법디렉토리 주소 적을때 사용하는 폰트(강조용), 하이퍼링크 작성, 형광팬 역할, Bold, ‘특정 제목으로 이동’팁,_주의사항_작성_방법  팁 작성  추가정보 작성  경고 작성  위험 작성  첨가 작성코드형태로 작성하기---package hello.hellospring;import org.springframew...",
+    "content": "서론 작성하는 곳강조, 하이퍼링크 작성 방법디렉토리 주소 적을때 사용하는 폰트(강조용), 하이퍼링크 작성, 형광팬 역할, Bold, ‘특정 제목으로 이동’팁,_주의사항_작성_방법  팁 작성  추가정보 작성  경고 작성  위험 작성  첨가 작성코드형태로 작성하기---package hello.hellospring;import org.springframework.boot.SpringApplication;import org.springframework.boot.autoconfigure.SpringBootApplication;@SpringBootApplication // 파일 확장자에 맞는 주석 사용 가능public class HelloSpringApplication { \tpublic static void main(String[] args) {\t\tSpringApplication.run(HelloSpringApplication.class, args);\t}}---이동용_제목여기로 이동 됩니다.Learn MoreFor more knowledge about Jekyll posts, visit the Jekyll Docs: Posts."
+  },
+  
+  {
+    "title": "20164번(홀수 홀릭 호석)",
+    "url": "/posts/%ED%99%80%EC%88%98-%ED%99%80%EB%A6%AD-%ED%98%B8%EC%84%9D/",
+    "categories": "Algo, 백준",
+    "tags": "dfs",
+    "date": "2022-11-22 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  N이 10^9-1라서 시간복잡도가 클 것 같지만 이 문제에서는 수의 값보다 수의 length와 관계있기 때문에 생각보다 시간복잡도가 얼마 안나온다.  어떤 숫자 내 홀수의 개수를 구하는 시간복잡도는 최악의 경우 9번, O(1)이다.  세 자리 수 이상일 때 그 수를 임의로 3개의 수로 분할하는 시간복잡도도 최악의 경우 6*7정도 나온다.  ...",
+    "content": "첫 시도  N이 10^9-1라서 시간복잡도가 클 것 같지만 이 문제에서는 수의 값보다 수의 length와 관계있기 때문에 생각보다 시간복잡도가 얼마 안나온다.  어떤 숫자 내 홀수의 개수를 구하는 시간복잡도는 최악의 경우 9번, O(1)이다.  세 자리 수 이상일 때 그 수를 임의로 3개의 수로 분할하는 시간복잡도도 최악의 경우 6*7정도 나온다.  min과 max를 만들고 재귀로 상황별 홀수의 갯수를 확인해 min, max를 갱신해준다.  풀이는 생각해냈는데 구현에서 1시간 초과해결import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    static intmax= 0;    static intmin= Integer.MAX_VALUE;    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        int N = Integer.parseInt(br.readLine());        dfs(N,countOdd(N));        System.out.println(min+\" \"+max);    }    static void dfs(int num, int count){        if(num &lt; 10) {            min= Math.min(min,count);            max= Math.max(max,count);        }        else if(num &lt; 100) {            int sum = (num / 10) + (num % 10);            dfs(sum,count+countOdd(sum));        }        else {            String str = Integer.toString(num);            int len = str.length();            for(int i = 0; i &lt;= len-3; ++i) {                for(int j = i+1; j &lt;= len-2; ++j) {                    String s1 = str.substring(0,i+1);                    String s2 = str.substring(i+1,j+1);                    String s3 = str.substring(j+1,len);                    int sum = Integer.parseInt(s1) + Integer.parseInt(s2) + Integer.parseInt(s3);                    dfs(sum,count+countOdd(sum));                }            }        }    }    static int countOdd(int num){        int result = 0;        while(num&gt;0){ // 최대 9번            int temp = num % 10;            if(temp%2 == 1) result++;            num /= 10;        }        return result;    }}참고  https://velog.io/@jh5253/백준-20164-홀수-홀릭-호석Java자바"
+  },
+  
+  {
+    "title": "21772번(가희의 고구마 먹방)",
+    "url": "/posts/%EA%B0%80%ED%9D%AC%EC%9D%98-%EA%B3%A0%EA%B5%AC%EB%A7%88-%EB%A8%B9%EB%B0%A9/",
+    "categories": "Algo, 백준",
+    "tags": "bfs, dfs",
+    "date": "2022-11-22 23:00:00 +0800",
+    
+
+
+
+
+
+    
+    "snippet": "첫 시도  dfs+bfs문제로 예상  아직도 구현이 미숙해 1시간 초과  인터넷에서 답 확인해결  dfs+bfs문제로 예상  아직도 구현이 미숙해 1시간 초과  인터넷에서 답 확인import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    static ...",
+    "content": "첫 시도  dfs+bfs문제로 예상  아직도 구현이 미숙해 1시간 초과  인터넷에서 답 확인해결  dfs+bfs문제로 예상  아직도 구현이 미숙해 1시간 초과  인터넷에서 답 확인import java.io.*;import java.lang.reflect.Array;import java.util.*;public class Main {    static String[][]input;    static int[]dr= {0,-1,0,1};    static int[]dc= {-1,0,1,0};    static int R,C,T;    public static void main(String[] ars) throws IOException {        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));        StringTokenizer st;        st = new StringTokenizer(br.readLine());        R= Integer.parseInt(st.nextToken());        C= Integer.parseInt(st.nextToken());        T= Integer.parseInt(st.nextToken());        input= new String[R][C];        Node gahi = new Node(0,0);        for(int i = 0; i&lt;R; i++){            String[] temp = br.readLine().split(\"\");            for(int j = 0; j&lt;C; j++){                input[i][j] = temp[j];                if(input[i][j].equals(\"G\")){                    gahi = new Node(i,j);                }            }        }        int result =dfs(0, gahi.r, gahi.c);        System.out.println(result);    }    static int dfs(int depth, int r, int c){        if(depth ==T){            return 0;        }        int count = 0;        String temp = \"\";        int goguma = 0;        for(int i = 0; i&lt;4; i++){            int nr = r+dr[i];            int nc = c+dc[i];            count = 0;            if(nr &lt; 0 || nr &gt;=R|| nc &lt; 0 || nc &gt;=C||input[nr][nc].equals(\"#\")){                continue;            }            if(input[nr][nc].equals(\"S\")){                count++;            }            temp =input[nr][nc];            input[nr][nc] = \".\";            goguma = Math.max(goguma,dfs(depth+1,nr,nc)+count);            input[nr][nc] = temp;        }        return goguma;    }}class Node{    int r;    int c;    Node(int r, int c){        this.r = r;        this.c = c;    }}참고  https://kwoncorin.tistory.com/116"
+  }
+  
+]
+
